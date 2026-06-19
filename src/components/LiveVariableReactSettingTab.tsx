@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from 'react';
-import LiveVariable from 'src/main';
-import Setting from './obsidian-components/Setting';
+import { FC, useEffect, useState } from "react";
+import LiveVariable from "src/main";
+import Setting from "./obsidian-components/Setting";
 
 interface LiveVariableReactSettingTabProps {
 	plugin: LiveVariable;
@@ -38,7 +38,7 @@ const LiveVariablesReactSettingTab: FC<LiveVariableReactSettingTabProps> = ({
 				className="setting-item"
 				name="Highlight live text"
 				desc="Add highlighting style to inserted live variables."
-				style={{ borderBottom: '0.5px solid var(--background-modifier-border)' }}
+				style={{ borderBottom: "0.5px solid var(--background-modifier-border)" }}
 			>
 				<Setting.Checkbox
 					checked={highlightText}
@@ -49,7 +49,7 @@ const LiveVariablesReactSettingTab: FC<LiveVariableReactSettingTabProps> = ({
 				className="setting-item"
 				name="Copy resolved values"
 				desc="When copying text from the editor, replace {{variables}} with their current value instead of the raw syntax."
-				style={{ borderBottom: '0.5px solid var(--background-modifier-border)' }}
+				style={{ borderBottom: "0.5px solid var(--background-modifier-border)" }}
 			>
 				<Setting.Checkbox
 					checked={copyResolvedValues}

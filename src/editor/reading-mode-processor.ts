@@ -1,15 +1,15 @@
-import LiveVariables from '../main';
+import LiveVariables from "../main";
 import {
 	isKnownVariable,
 	liveVariableRegex,
 	resolveLiveVariableValue,
-} from './live-variable-shared';
+} from "./live-variable-shared";
 
 const isInsideCode = (node: Node): boolean => {
 	let el = node.parentElement;
 	while (el) {
 		const tag = el.tagName;
-		if (tag === 'CODE' || tag === 'PRE') {
+		if (tag === "CODE" || tag === "PRE") {
 			return true;
 		}
 		el = el.parentElement;
@@ -32,15 +32,15 @@ export const liveVariableReadingProcessor =
 		const targets: Text[] = [];
 		let current = walker.nextNode();
 		while (current) {
-			const text = current.nodeValue ?? '';
-			if (text.includes('{{') && !isInsideCode(current)) {
+			const text = current.nodeValue ?? "";
+			if (text.includes("{{") && !isInsideCode(current)) {
 				targets.push(current as Text);
 			}
 			current = walker.nextNode();
 		}
 
 		for (const node of targets) {
-			const text = node.nodeValue ?? '';
+			const text = node.nodeValue ?? "";
 			liveVariableRegex.lastIndex = 0;
 			let match: RegExpExecArray | null;
 			let lastIndex = 0;
@@ -67,9 +67,9 @@ export const liveVariableReadingProcessor =
 						)
 					);
 				}
-				const span = doc.createElement('span');
+				const span = doc.createElement("span");
 				if (plugin.settings.highlightText) {
-					span.className = 'lv-live-text';
+					span.className = "lv-live-text";
 				}
 				span.textContent = value;
 				fragment.appendChild(span);

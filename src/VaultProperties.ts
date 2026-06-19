@@ -1,5 +1,5 @@
-import { App, FrontMatterCache, TFile } from 'obsidian';
-import { stringifyIfObj, trancateString } from './utils';
+import { App, FrontMatterCache, TFile } from "obsidian";
+import { stringifyIfObj, trancateString } from "./utils";
 
 export type Properties = Record<string, unknown> | string | number | boolean | null | unknown[] | undefined;
 
@@ -18,9 +18,9 @@ export default class VaultProperties {
 
 	propertyChanged = (newProperties: FrontMatterCache | undefined) => {
 		const localObj = this.localProperties !== null &&
-			typeof this.localProperties === 'object' &&
+			typeof this.localProperties === "object" &&
 			!Array.isArray(this.localProperties)
-			? (this.localProperties as Record<string, unknown>)
+			? this.localProperties
 			: undefined;
 		if (
 			Object.entries(localObj ?? {}).length !==
@@ -71,11 +71,11 @@ export default class VaultProperties {
 		filePath: string,
 		value: Properties
 	) {
-		const parts = filePath.split('/');
+		const parts = filePath.split("/");
 		let current = obj;
 		for (let i = 0; i < parts.length - 1; i++) {
 			if (
-				typeof current[parts[i]] !== 'object' ||
+				typeof current[parts[i]] !== "object" ||
 				current[parts[i]] === null
 			) {
 				current[parts[i]] = {};
@@ -105,14 +105,14 @@ export default class VaultProperties {
 	}
 
 	private getValueByPath(obj: Properties, path: string): Properties {
-		const isFolder = !path.contains('.md');
+		const isFolder = !path.contains(".md");
 		const keys: string[] = [];
 		if (isFolder) {
-			keys.push(...path.split('/'));
+			keys.push(...path.split("/"));
 		} else {
-			const [fileTreePath, propertyPath] = path.split('.md');
-			if (fileTreePath) keys.push(...(fileTreePath + '.md').split('/'));
-			if (propertyPath) keys.push(...propertyPath.slice(1).split('.'));
+			const [fileTreePath, propertyPath] = path.split(".md");
+			if (fileTreePath) keys.push(...(fileTreePath + ".md").split("/"));
+			if (propertyPath) keys.push(...propertyPath.slice(1).split("."));
 		}
 		return this.traversePath(obj, keys) ?? {};
 	}
@@ -123,7 +123,7 @@ export default class VaultProperties {
 			if (
 				result !== null &&
 				result !== undefined &&
-				typeof result === 'object' &&
+				typeof result === "object" &&
 				!Array.isArray(result) &&
 				key in result
 			) {
@@ -139,7 +139,7 @@ export default class VaultProperties {
 		localProperties: Properties,
 		path: string
 	): Properties {
-		const keys = path.split('.');
+		const keys = path.split(".");
 		return this.traversePath(localProperties, keys);
 	}
 
@@ -153,7 +153,7 @@ export default class VaultProperties {
 	}
 
 	updateLocalKeysAndAllVariableKeys() {
-		this.localKeys = this.getAllPaths(this.getLocalProperties(), '', true);
+		this.localKeys = this.getAllPaths(this.getLocalProperties(), "", true);
 		this.localKeysAndAllVariableKeys = [
 			...this.localKeys,
 			...this.getAllPaths(this.properties),
@@ -166,11 +166,11 @@ export default class VaultProperties {
 
 	private getAllPaths(
 		obj: Properties,
-		parentPath = '',
+		parentPath = "",
 		local?: boolean
 	): string[] {
-		const isNestedProperty = parentPath.contains('.md/') || local;
-		const separator = isNestedProperty ? '.' : '/';
+		const isNestedProperty = parentPath.contains(".md/") || local;
+		const separator = isNestedProperty ? "." : "/";
 		let paths: string[] = [];
 
 		for (const [key, value] of Object.entries(obj ?? {})) {
@@ -180,7 +180,7 @@ export default class VaultProperties {
 
 			paths.push(fullPath);
 
-			if (value !== null && typeof value === 'object') {
+			if (value !== null && typeof value === "object") {
 				paths = [...paths, ...this.getAllPaths(value as Properties, fullPath, local)];
 			}
 		}
@@ -189,6 +189,6 @@ export default class VaultProperties {
 
 	getPropertyPreview(path: string) {
 		const value = this.getProperty(path);
-		return value ? trancateString(stringifyIfObj(value), 50) : 'no value';
+		return value ? trancateString(stringifyIfObj(value), 50) : "no value";
 	}
 }

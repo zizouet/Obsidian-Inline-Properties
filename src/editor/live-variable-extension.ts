@@ -5,16 +5,16 @@ import {
 	ViewPlugin,
 	ViewUpdate,
 	WidgetType,
-} from '@codemirror/view';
-import { RangeSetBuilder, StateEffect } from '@codemirror/state';
-import { MarkdownView } from 'obsidian';
-import LiveVariables from '../main';
+} from "@codemirror/view";
+import { RangeSetBuilder, StateEffect } from "@codemirror/state";
+import { MarkdownView } from "obsidian";
+import LiveVariables from "../main";
 import {
 	isKnownVariable,
 	liveVariableRegex,
 	resolveLiveVariableValue,
 	resolveLiveVariablesInText,
-} from './live-variable-shared';
+} from "./live-variable-shared";
 
 // Dispatched to force a decoration rebuild when a referenced variable changes
 // in another note (which does not itself produce a doc change in this editor).
@@ -22,7 +22,7 @@ const refreshLiveVariablesEffect = StateEffect.define<void>();
 
 /** Forces every open markdown editor to recompute its live-variable widgets. */
 export const refreshAllLiveVariables = (plugin: LiveVariables) => {
-	plugin.app.workspace.getLeavesOfType('markdown').forEach((leaf) => {
+	plugin.app.workspace.getLeavesOfType("markdown").forEach((leaf) => {
 		const view = leaf.view;
 		if (view instanceof MarkdownView) {
 			const cm = (view.editor as unknown as { cm?: EditorView }).cm;
@@ -49,17 +49,17 @@ class LiveVariableWidget extends WidgetType {
 	}
 
 	toDOM(view: EditorView): HTMLElement {
-		const span = view.dom.ownerDocument.createElement('span');
+		const span = view.dom.ownerDocument.createElement("span");
 		if (this.highlight) {
-			span.className = 'lv-live-text';
+			span.className = "lv-live-text";
 		}
 		span.textContent = this.value;
 		// Hovering reveals the underlying {{variable}} without touching the
 		// document; moving the mouse away restores the rendered value.
-		span.addEventListener('mouseenter', () => {
+		span.addEventListener("mouseenter", () => {
 			span.textContent = this.source;
 		});
-		span.addEventListener('mouseleave', () => {
+		span.addEventListener("mouseleave", () => {
 			span.textContent = this.value;
 		});
 		return span;

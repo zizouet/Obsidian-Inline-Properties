@@ -1,15 +1,15 @@
-import { Plugin } from 'obsidian';
+import { Plugin } from "obsidian";
 import {
 	DEFAULT_SETTINGS,
 	LiveVariablesSettings,
 	LiveVariablesSettingTab,
-} from './LiveVariablesSettings';
-import VaultProperties from './VaultProperties';
-import metadataCacheChangeEvent from './events/metadata-cache-change';
-import activeLeafChangeEvent from './events/active-leaf-change';
-import { VariableSuggest } from './suggest/variable-suggest';
-import { liveVariableExtension } from './editor/live-variable-extension';
-import { liveVariableReadingProcessor } from './editor/reading-mode-processor';
+} from "./LiveVariablesSettings";
+import VaultProperties from "./VaultProperties";
+import metadataCacheChangeEvent from "./events/metadata-cache-change";
+import activeLeafChangeEvent from "./events/active-leaf-change";
+import { VariableSuggest } from "./suggest/variable-suggest";
+import { liveVariableExtension } from "./editor/live-variable-extension";
+import { liveVariableReadingProcessor } from "./editor/reading-mode-processor";
 
 export default class LiveVariables extends Plugin {
 	public settings: LiveVariablesSettings;
@@ -36,7 +36,7 @@ export default class LiveVariables extends Plugin {
 		this.settings = Object.assign(
 			{},
 			DEFAULT_SETTINGS,
-			await this.loadData()
+			(await this.loadData()) as Partial<LiveVariablesSettings>
 		);
 	}
 

@@ -12,7 +12,7 @@ If your plugin does not need CSS, delete this file.
 	height: auto; /* Adjust height */
 }
 .CodeMirror {
-	border: 1px solid var(--text-muted) !important;
+	border: 1px solid var(--text-muted);
 }
 .value-preview {
 	margin: 10px 0;

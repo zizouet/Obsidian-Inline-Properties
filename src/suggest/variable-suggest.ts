@@ -5,10 +5,10 @@ import {
 	EditorSuggestContext,
 	EditorSuggestTriggerInfo,
 	TFile,
-} from 'obsidian';
-import LiveVariables from '../main';
-import { trancateString } from '../utils';
-import { Properties } from '../VaultProperties';
+} from "obsidian";
+import LiveVariables from "../main";
+import { trancateString } from "../utils";
+import { Properties } from "../VaultProperties";
 
 export interface Property {
 	key: string;
@@ -26,7 +26,7 @@ const hasVariableValue = (value: Properties): boolean => {
 	if (value === undefined || value === null) {
 		return false;
 	}
-	if (typeof value === 'object' && !Array.isArray(value)) {
+	if (typeof value === "object" && !Array.isArray(value)) {
 		return false;
 	}
 	return true;
@@ -71,8 +71,8 @@ export class VariableSuggest extends EditorSuggest<Property> {
 	}
 
 	renderSuggestion(property: Property, el: HTMLElement): void {
-		el.createEl('div', { text: property.key });
-		el.createEl('small', {
+		el.createEl("div", { text: property.key });
+		el.createEl("small", {
 			text: trancateString(property.value, 100),
 		});
 	}

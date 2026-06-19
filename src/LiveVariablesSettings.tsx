@@ -1,7 +1,7 @@
-import { App, PluginSettingTab } from 'obsidian';
-import LiveVariable from './main';
-import { createRoot, Root } from 'react-dom/client';
-import LiveVariablesReactSettingTab from './components/LiveVariableReactSettingTab';
+import { App, PluginSettingTab } from "obsidian";
+import LiveVariable from "./main";
+import { createRoot, Root } from "react-dom/client";
+import LiveVariablesReactSettingTab from "./components/LiveVariableReactSettingTab";
 
 export interface LiveVariablesSettings {
 	highlightText: boolean;

@@ -4,7 +4,7 @@ import {
 	MouseEventHandler,
 	ReactNode,
 	useState,
-} from 'react';
+} from "react";
 
 interface SettingProps {
 	name?: string;
@@ -25,10 +25,10 @@ interface SettingComponent extends FC<SettingProps> {
 }
 
 const Setting: SettingComponent = ({
-	name = '',
-	desc = '',
-	children = '',
-	className = '',
+	name = "",
+	desc = "",
+	children = "",
+	className = "",
 	heading = false,
 	style,
 }) => {
@@ -36,7 +36,7 @@ const Setting: SettingComponent = ({
 		<div
 			style={style}
 			className={`setting-item ${className} ${
-				heading ? 'setting-item-heading' : ''
+				heading ? "setting-item-heading" : ""
 			}`}
 		>
 			<div className="setting-item-info">
@@ -57,9 +57,9 @@ interface SettingTextProps {
 }
 
 Setting.Text = ({
-	type = 'text',
+	type = "text",
 	spellCheck = false,
-	placeHolder = '',
+	placeHolder = "",
 	onChange = () => {},
 	value,
 }) => {
@@ -82,7 +82,7 @@ interface SettingButtonProps {
 
 Setting.Button = ({ onClick, children, cta = false }) => {
 	return (
-		<button className={cta ? 'mod-cta' : ''} onClick={onClick}>
+		<button className={cta ? "mod-cta" : ""} onClick={onClick}>
 			{children}
 		</button>
 	);
@@ -135,7 +135,7 @@ Setting.Checkbox = ({
 
 	return (
 		<div
-			className={`checkbox-container ${checked ? 'is-enabled' : ''}`}
+			className={`checkbox-container ${checked ? "is-enabled" : ""}`}
 			onClick={handleChange}
 		>
 			<input
@@ -157,7 +157,7 @@ interface SettingExtraButtonProps {
 	onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-Setting.ExtraButton = ({ onClick = () => {}, icon, ariaLabel = '' }) => {
+Setting.ExtraButton = ({ onClick = () => {}, icon, ariaLabel = "" }) => {
 	return (
 		<div
 			className="clickable-icon extra-setting-button"
@@ -184,7 +184,7 @@ Setting.Toggle = ({
 	return (
 		<div
 			className={`checkbox-container ${
-				checked ? 'is-enabled' : 'is-disabled'
+				checked ? "is-enabled" : "is-disabled"
 			}`}
 			onClick={(e) => {
 				setChecked(!checked);

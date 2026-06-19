@@ -1,5 +1,5 @@
-import VaultProperties from '../VaultProperties';
-import { stringifyIfObj } from '../utils';
+import VaultProperties from "../VaultProperties";
+import { stringifyIfObj } from "../utils";
 
 export const liveVariableRegex = /\{\{([^{}]+?)\}\}/g;
 
@@ -29,7 +29,7 @@ export const resolveLiveVariablesInText = (
 	text: string,
 	vaultProperties: VaultProperties
 ): string => {
-	return text.replace(liveVariableRegex, (token, content) => {
+	return text.replace(liveVariableRegex, (token: string, content: string) => {
 		if (!isKnownVariable(content, vaultProperties)) return token;
 		return resolveLiveVariableValue(content, vaultProperties) ?? token;
 	});
