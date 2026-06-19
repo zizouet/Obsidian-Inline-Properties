@@ -3,22 +3,14 @@ import LiveVariable from './main';
 import { createRoot, Root } from 'react-dom/client';
 import LiveVariablesReactSettingTab from './components/LiveVariableReactSettingTab';
 
-export interface CustomFunction {
-    key: React.Key;
-	name: string;
-	code: string;
-}
-
 export interface LiveVariablesSettings {
-	customFunctions: CustomFunction[];
 	highlightText: boolean;
 	copyResolvedValues: boolean;
 }
 
 export const DEFAULT_SETTINGS: LiveVariablesSettings = {
-	customFunctions: [],
 	highlightText: true,
-	copyResolvedValues: true
+	copyResolvedValues: true,
 };
 
 export class LiveVariablesSettingTab extends PluginSettingTab {
@@ -32,9 +24,8 @@ export class LiveVariablesSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-        this.renderReactSettingTab();
+		this.renderReactSettingTab();
 	}
-
 
 	renderReactSettingTab() {
 		this.root?.render(

@@ -1,11 +1,8 @@
-import { Dropdown, MenuProps } from 'antd';
-
 import {
 	ChangeEventHandler,
 	FC,
 	MouseEventHandler,
 	ReactNode,
-	useEffect,
 	useState,
 } from 'react';
 
@@ -22,7 +19,6 @@ interface SettingComponent extends FC<SettingProps> {
 	Text: FC<SettingTextProps>;
 	Button: FC<SettingButtonProps>;
 	Dropdown: FC<SettingDropdownProps>;
-	Search: FC<SettingSearchProps>;
 	ExtraButton: FC<SettingExtraButtonProps>;
 	Toggle: FC<SettingToggleProps>;
 	Checkbox: FC<SettingCheckboxProps>;
@@ -154,86 +150,6 @@ Setting.Checkbox = ({
 	);
 };
 
-interface SettingSearchProps {
-	suggestions?: string[];
-	onChange?: (value: string) => void;
-	value?: string;
-	placeHolder?: string;
-}
-
-Setting.Search = ({
-	placeHolder = '',
-	suggestions = [],
-	value: initValue = '',
-	onChange = () => {},
-}) => {
-	const [items, setItems] = useState<MenuProps['items']>([]);
-
-	const [value, setValue] = useState(initValue);
-	const [selectedKey, setSelectedKey] = useState<string>('');
-
-	useEffect(() => {
-		onChange(value);
-	}, [value]);
-
-	useEffect(() => {
-		setItems(
-			suggestions.map((suggestion, index) => {
-				return {
-					key: index + 1,
-					label: suggestion,
-					onClick: (_) => {
-						setValue(suggestion);
-					},
-				};
-			})
-		);
-	}, [suggestions]);
-
-	return (
-		<div className="search-input-container">
-			<Dropdown
-				menu={{
-					items,
-					selectable: true,
-					selectedKeys: [selectedKey],
-					style: {
-						backgroundColor: 'var(--background-primary)',
-						maxHeight: '250px',
-						maxWidth: '500px',
-						overflowY: 'auto', // Enable vertical scrolling
-						overflowX: 'auto', // Enable horizontal scrolling
-						whiteSpace: 'nowrap', // Prevent text from wrapping
-						display: 'block', // Ensure block display for proper scrolling
-					},
-					onSelect: (info) => {
-						setSelectedKey(info.key);
-					},
-				}}
-				trigger={['click']}
-			>
-				<input
-					enterKeyHint="search"
-					type="search"
-					spellCheck="false"
-					placeholder={placeHolder}
-					value={value}
-					onChange={(e) => {
-						setValue(e.target.value);
-					}}
-				/>
-			</Dropdown>
-
-			<div
-				className="search-input-clear-button"
-				onClick={() => {
-					setValue('');
-					setSelectedKey('');
-				}}
-			></div>
-		</div>
-	);
-};
 
 interface SettingExtraButtonProps {
 	icon: ReactNode;

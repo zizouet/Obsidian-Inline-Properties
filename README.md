@@ -1,6 +1,8 @@
-# Obsidian Dynamic Variables
+# Inline Properties
 
-An [Obsidian](https://obsidian.md) plugin that lets you define variables in note frontmatter and reference them anywhere in your vault using `{{variable}}` syntax. Values render inline in both Live Preview and Reading mode.
+![](demo/demo.gif)
+
+An [Obsidian](https://obsidian.md) plugin that lets you reference note properties as inline variables anywhere in your vault using `{{variable}}` syntax. Values render inline in both Live Preview and Reading mode.
 
 ## How it works
 
@@ -10,18 +12,16 @@ Add variables to a note's frontmatter (Properties):
 ---
 project: Acme Corp
 rate: 150
-hours: 40
 ---
 ```
 
-Then use them anywhere in that note — or anywhere in the vault:
+Then use them anywhere in that note, or anywhere else in the vault:
 
 ```
 The project **{{project}}** runs at ${{rate}}/hour.
-Total cost: ${{sum(rate, hours)}}
 ```
 
-Variables are replaced inline as you type. Hovering a rendered value briefly reveals the raw `{{...}}` source.
+The `{{variable}}` token is replaced inline as you type. Hovering a rendered value briefly reveals the raw `{{...}}` source so you can edit it. When you copy text containing variables, the resolved values are copied, not the raw `{{...}}` syntax.
 
 ## Variable scope
 
@@ -29,34 +29,9 @@ Variables are replaced inline as you type. Hovering a rendered value briefly rev
 |---|---|
 | `{{name}}` | Property `name` from the current note's frontmatter |
 | `{{Notes/Budget.md.rate}}` | Property `rate` from `Notes/Budget.md` |
-| `{{Clients/Acme.md.contact.email}}` | Nested frontmatter property |
+| `{{Clients/Acme.md.contact.email}}` | Nested frontmatter property in another note |
 
-Local properties take priority over vault-wide references.
-
-## Query functions
-
-Use functions inside `{{...}}` for computed values:
-
-| Function | Description | Example |
-|---|---|---|
-| `get(path)` | Read a property value | `{{get(rate)}}` |
-| `sum(a, b, ...)` | Sum or concatenate properties | `{{sum(q1, q2, q3)}}` |
-| `jsFunc(args, func = ...)` | Apply a JS lambda | `{{jsFunc(rate, hours, func = (r, h) => r * h)}}` |
-| `codeBlock(args, code = ..., lang = ...)` | Inject values into a code block | see below |
-
-Plain `{{name}}` is shorthand for `{{get(name)}}`.
-
-### jsFunc example
-
-```
-Total: ${{jsFunc(rate, hours, func = (r, h) => r * h)}}
-```
-
-### codeBlock example
-
-```
-{{codeBlock(budget, code = console.log({{}}), lang = js)}}
-```
+Local (current note) properties take priority over vault-wide references when names collide.
 
 ## Autocomplete
 
@@ -67,12 +42,11 @@ Type `{{` in any note to trigger autocomplete. Suggestions show the property key
 | Setting | Default | Description |
 |---|---|---|
 | Highlight live text | On | Adds a visual highlight to rendered variable values |
-| Copy resolved values | On | When copying text, replaces `{{var}}` with its current value instead of raw syntax |
-| Custom JS functions | — | Named JS functions available as `jsFunc` targets across the vault |
+| Copy resolved values | On | When copying text, replaces `{{var}}` with its current value instead of the raw syntax |
 
 ### Custom highlighting
 
-The highlight style is applied via the `.lv-live-text` CSS class. Override it in a CSS snippet:
+Override the `.lv-live-text` CSS class in a CSS snippet:
 
 ```css
 .lv-live-text {
@@ -99,8 +73,12 @@ npm run dev      # watch mode
 npm run build    # production build
 ```
 
-The plugin targets Obsidian `0.15.0+` and is compatible with both desktop and mobile.
+Targets Obsidian `0.15.0+`, compatible with desktop and mobile.
+
+## Philosophy
+
+This plugin does one thing: inline variable substitution. The codebase is intentionally minimal to stay easy to maintain. There are no plans to add new features. Future work is limited to improving what is already here.
 
 ## Credits
 
-Forked from [HamzaBenyazid/Live-variables](https://github.com/HamzaBenyazid/Live-variables). Refactored to use a CodeMirror 6 ViewPlugin for Live Preview rendering and a native `EditorSuggest` for autocomplete, replacing the previous modal-based workflow.
+Forked from [HamzaBenyazid/Live-variables](https://github.com/HamzaBenyazid/Live-variables). Refactored to a CodeMirror 6 ViewPlugin for Live Preview and a native `EditorSuggest` for autocomplete.

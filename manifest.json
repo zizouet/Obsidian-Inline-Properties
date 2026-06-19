@@ -1,11 +1,10 @@
 {
-	"id": "live-variables",
-	"name": "Live Variables",
-	"version": "2.1.1",
+	"id": "inline-properties",
+	"name": "Inline Properties",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Define variables in your note's properties and reuse them throughout your content.",
-	"author": "Hamza Ben Yazid",
-	"authorUrl": "https://github.com/HamzaBenyazid",
-	"fundingUrl": " https://github.com/sponsors/HamzaBenyazid",
-	"isDesktopOnly": false
+	"description": "Reference note properties as inline variables anywhere in your vault using {{variable}} syntax.",
+	"author": "Zizouet",
+	"authorUrl": "https://github.com/Zizouet",
+	"isDesktopOnly": true
 }
