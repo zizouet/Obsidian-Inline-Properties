@@ -1,0 +1,40 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "env": { "node": true },
+    "plugins": [
+      "@typescript-eslint",
+      "react",
+      "unused-imports"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ], 
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+      }
+    },
+    "rules": {
+      "no-mixed-spaces-and-tabs":"off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^_",
+          "args": "after-used",
+          "argsIgnorePattern": "^_",
+          "caughtErrors": "none"
+        }
+      ],
+      "@typescript-eslint/ban-ts-comment": "off",
+      "no-prototype-builtins": "off",
+      "@typescript-eslint/no-empty-function": "off"
+    } 
+  }

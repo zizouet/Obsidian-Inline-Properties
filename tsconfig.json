@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"inlineSourceMap": true,
+		"allowSyntheticDefaultImports": true,
+		"inlineSources": true,
+		"module": "ESNext",
+		"target": "ES6",
+		"allowJs": true,
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"moduleResolution": "node",
+		"importHelpers": true,
+		"isolatedModules": true,
+
+		"strictNullChecks": true,
+		"jsx": "react-jsx",
+		"lib": ["DOM", "es2021"]
+	},
+	"include": ["**/*.ts", "**/*.tsx"]
+}
