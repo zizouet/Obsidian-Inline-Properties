@@ -1,11 +1,11 @@
-export const stringifyIfObj = (obj: any) => {
-	if (typeof obj === 'object') {
+export const stringifyIfObj = (obj: unknown): string => {
+	if (typeof obj === 'object' && obj !== null) {
 		return JSON.stringify(obj);
 	}
-	return String(obj);
+	return String(obj as string | number | boolean);
 };
 
-export const checkArrayTypes = (arr: any[]) => {
+export const checkArrayTypes = (arr: unknown[]): string => {
 	if (!Array.isArray(arr)) return 'string';
 	const firstType = typeof arr[0];
 	const allSameType = arr.every((item) => typeof item === firstType);

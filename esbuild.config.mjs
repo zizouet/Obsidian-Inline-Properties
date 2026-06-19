@@ -1,4 +1,4 @@
-import builtins from "builtin-modules";
+import { builtinModules } from "module";
 import esbuild from "esbuild";
 import process from "process";
 
@@ -31,7 +31,7 @@ const context = await esbuild.context({
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/lr",
-		...builtins],
+		...builtinModules],
 	format: "cjs",
 	target: "es2018",
 	logLevel: "info",

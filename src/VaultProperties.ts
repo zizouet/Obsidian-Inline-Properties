@@ -1,8 +1,7 @@
 import { App, FrontMatterCache, TFile } from 'obsidian';
 import { stringifyIfObj, trancateString } from './utils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Properties = Record<string, any> | string | number | undefined;
+export type Properties = Record<string, unknown> | string | number | boolean | null | unknown[] | undefined;
 
 export default class VaultProperties {
 	private app: App;
@@ -18,8 +17,13 @@ export default class VaultProperties {
 	}
 
 	propertyChanged = (newProperties: FrontMatterCache | undefined) => {
+		const localObj = this.localProperties !== null &&
+			typeof this.localProperties === 'object' &&
+			!Array.isArray(this.localProperties)
+			? (this.localProperties as Record<string, unknown>)
+			: undefined;
 		if (
-			Object.entries(this.localProperties ?? {}).length !==
+			Object.entries(localObj ?? {}).length !==
 			Object.entries(newProperties ?? {}).length
 		) {
 			return true;
@@ -27,8 +31,8 @@ export default class VaultProperties {
 		for (const [newPropKey, newPropVal] of Object.entries(
 			newProperties ?? {}
 		)) {
-			if (typeof this.localProperties === 'object') {
-				const currentPropVal = this.localProperties?.[newPropKey];
+			if (localObj) {
+				const currentPropVal = localObj[newPropKey];
 				if (
 					JSON.stringify(currentPropVal) !==
 					JSON.stringify(newPropVal)
@@ -114,14 +118,16 @@ export default class VaultProperties {
 	}
 
 	private traversePath(obj: Properties, keys: string[]) {
-		let result = obj;
+		let result: Properties = obj;
 		for (const key of keys) {
 			if (
-				result &&
+				result !== null &&
+				result !== undefined &&
 				typeof result === 'object' &&
-				result[key] !== undefined
+				!Array.isArray(result) &&
+				key in result
 			) {
-				result = result[key];
+				result = (result as Record<string, Properties>)[key];
 			} else {
 				return undefined;
 			}
@@ -174,8 +180,8 @@ export default class VaultProperties {
 
 			paths.push(fullPath);
 
-			if (typeof value === 'object') {
-				paths = [...paths, ...this.getAllPaths(value, fullPath, local)];
+			if (value !== null && typeof value === 'object') {
+				paths = [...paths, ...this.getAllPaths(value as Properties, fullPath, local)];
 			}
 		}
 		return paths;

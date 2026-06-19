@@ -1,11 +1,10 @@
 export const assertNoUndefinedElems = (
-	values: (any | undefined)[],
+	values: unknown[],
 	error = "assertNoUndefinedValues error"
 ) => {
-	values.map((val) => {
+	for (const val of values) {
 		if (val === undefined) {
 			throw Error(error);
 		}
-		return val;
-	});
+	}
 };

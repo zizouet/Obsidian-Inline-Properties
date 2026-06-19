@@ -25,8 +25,7 @@ export const refreshAllLiveVariables = (plugin: LiveVariables) => {
 	plugin.app.workspace.getLeavesOfType('markdown').forEach((leaf) => {
 		const view = leaf.view;
 		if (view instanceof MarkdownView) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const cm = (view.editor as any).cm as EditorView | undefined;
+			const cm = (view.editor as unknown as { cm?: EditorView }).cm;
 			cm?.dispatch({ effects: refreshLiveVariablesEffect.of() });
 		}
 	});

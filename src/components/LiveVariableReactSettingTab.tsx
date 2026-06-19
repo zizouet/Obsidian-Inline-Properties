@@ -13,7 +13,7 @@ const LiveVariablesReactSettingTab: FC<LiveVariableReactSettingTabProps> = ({
 	const [copyResolvedValues, setCopyResolvedValues] = useState<boolean>(true);
 
 	useEffect(() => {
-		plugin.loadSettings().then(() => {
+		void plugin.loadSettings().then(() => {
 			setHighlightText(plugin.settings.highlightText);
 			setCopyResolvedValues(plugin.settings.copyResolvedValues);
 		});
