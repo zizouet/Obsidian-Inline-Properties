@@ -1,6 +1,4 @@
-import { App, FileSystemAdapter, FrontMatterCache, TFile } from 'obsidian';
-import * as fs from 'fs';
-import * as path from 'path';
+import { App, FrontMatterCache, TFile } from 'obsidian';
 import { stringifyIfObj, trancateString } from './utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,7 +6,6 @@ export type Properties = Record<string, any> | string | number | undefined;
 
 export default class VaultProperties {
 	private app: App;
-	private vaultBasePath: string;
 	private properties: Properties;
 	private localProperties: Properties;
 	private localKeysAndAllVariableKeys: string[];
@@ -16,12 +13,7 @@ export default class VaultProperties {
 
 	constructor(app: App) {
 		this.app = app;
-		this.vaultBasePath = (
-			app.vault.adapter as FileSystemAdapter
-		).getBasePath();
 		this.updateVaultProperties();
-		// Initialize the key arrays so consumers (suggester, editor extension)
-		// that may run before the first active-leaf-change have valid data.
 		this.updateLocalKeysAndAllVariableKeys();
 	}
 
@@ -49,7 +41,7 @@ export default class VaultProperties {
 	};
 
 	private updateVaultProperties() {
-		this.properties = this.getDirectoryTree(this.vaultBasePath);
+		this.properties = this.buildVaultTree();
 	}
 
 	updateProperties(file: TFile) {
@@ -58,38 +50,39 @@ export default class VaultProperties {
 		this.updateLocalKeysAndAllVariableKeys();
 	}
 
-	private getDirectoryTree(dirPath: string): Properties {
-		const result: Properties = {};
-		const items = fs.readdirSync(dirPath);
-
-		for (const item of items) {
-			if (item.startsWith('.obsidian')) continue; // Ignore Obsidian system folder
-
-			const fullPath = path.join(dirPath, item);
-			const stats = fs.statSync(fullPath);
-
-			if (stats.isDirectory()) {
-				result[item] = this.getDirectoryTree(fullPath); // Recurse into folders
-			} else if (path.extname(item) === '.md') {
-				result[item] = this.getMarkdownProperties(fullPath); // Only include Markdown files
-			}
+	private buildVaultTree(): Properties {
+		const tree: Properties = {};
+		for (const file of this.app.vault.getMarkdownFiles()) {
+			this.setAtPath(
+				tree as Record<string, Properties>,
+				file.path,
+				this.getMarkdownProperties(file)
+			);
 		}
-		return result;
+		return tree;
 	}
 
-	private getMarkdownProperties(
-		markdownAbsoluteFilePath: string
-	): Properties {
-		const vaultPath =
-			path.posix.join(...this.vaultBasePath.split(path.sep)) + '/';
-		const markdownFilePath = path.posix
-			.join(...markdownAbsoluteFilePath.split(path.sep))
-			.slice(vaultPath.length);
-		const file = this.app.vault.getFileByPath(markdownFilePath);
-		if (file) {
-			return this.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
+	private setAtPath(
+		obj: Record<string, Properties>,
+		filePath: string,
+		value: Properties
+	) {
+		const parts = filePath.split('/');
+		let current = obj;
+		for (let i = 0; i < parts.length - 1; i++) {
+			if (
+				typeof current[parts[i]] !== 'object' ||
+				current[parts[i]] === null
+			) {
+				current[parts[i]] = {};
+			}
+			current = current[parts[i]] as Record<string, Properties>;
 		}
-		return {};
+		current[parts[parts.length - 1]] = value;
+	}
+
+	private getMarkdownProperties(file: TFile): Properties {
+		return this.app.metadataCache.getFileCache(file)?.frontmatter ?? {};
 	}
 
 	getLocalProperty(key: string): Properties {
@@ -128,20 +121,19 @@ export default class VaultProperties {
 				typeof result === 'object' &&
 				result[key] !== undefined
 			) {
-				result = result[key]; // Traverse into the next level
+				result = result[key];
 			} else {
-				return undefined; // Return undefined if the path is not valid
+				return undefined;
 			}
 		}
-
-		return result; // Return the value at the final path
+		return result;
 	}
 
 	private getLocalValueByPath(
 		localProperties: Properties,
 		path: string
 	): Properties {
-		const keys = path.split('.'); // Split path into keys
+		const keys = path.split('.');
 		return this.traversePath(localProperties, keys);
 	}
 
@@ -176,7 +168,6 @@ export default class VaultProperties {
 		let paths: string[] = [];
 
 		for (const [key, value] of Object.entries(obj ?? {})) {
-			// Create the full path for the current key
 			const fullPath = parentPath
 				? `${parentPath}${separator}${key}`
 				: key;
@@ -184,7 +175,6 @@ export default class VaultProperties {
 			paths.push(fullPath);
 
 			if (typeof value === 'object') {
-				// If it's a folder, recurse deeper
 				paths = [...paths, ...this.getAllPaths(value, fullPath, local)];
 			}
 		}

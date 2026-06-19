@@ -49,8 +49,8 @@ class LiveVariableWidget extends WidgetType {
 		);
 	}
 
-	toDOM(): HTMLElement {
-		const span = document.createElement('span');
+	toDOM(view: EditorView): HTMLElement {
+		const span = view.dom.ownerDocument.createElement('span');
 		if (this.highlight) {
 			span.className = 'lv-live-text';
 		}

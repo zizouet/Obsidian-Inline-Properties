@@ -22,13 +22,13 @@ const LiveVariablesReactSettingTab: FC<LiveVariableReactSettingTabProps> = ({
 	const updateHighlightText = (newValue: boolean) => {
 		setHighlightText(newValue);
 		plugin.settings.highlightText = newValue;
-		plugin.saveSettings();
+		void plugin.saveSettings();
 	};
 
 	const updateCopyResolvedValues = (newValue: boolean) => {
 		setCopyResolvedValues(newValue);
 		plugin.settings.copyResolvedValues = newValue;
-		plugin.saveSettings();
+		void plugin.saveSettings();
 	};
 
 	return (

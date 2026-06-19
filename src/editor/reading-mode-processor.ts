@@ -23,7 +23,8 @@ const isInsideCode = (node: Node): boolean => {
  */
 export const liveVariableReadingProcessor =
 	(plugin: LiveVariables) => (el: HTMLElement) => {
-		const walker = document.createTreeWalker(
+		const doc = el.ownerDocument;
+		const walker = doc.createTreeWalker(
 			el,
 			NodeFilter.SHOW_TEXT,
 			null
@@ -44,7 +45,7 @@ export const liveVariableReadingProcessor =
 			let match: RegExpExecArray | null;
 			let lastIndex = 0;
 			let replaced = false;
-			const fragment = document.createDocumentFragment();
+			const fragment = doc.createDocumentFragment();
 
 			while ((match = liveVariableRegex.exec(text)) !== null) {
 				const content = match[1];
@@ -61,12 +62,12 @@ export const liveVariableReadingProcessor =
 
 				if (match.index > lastIndex) {
 					fragment.appendChild(
-						document.createTextNode(
+						doc.createTextNode(
 							text.slice(lastIndex, match.index)
 						)
 					);
 				}
-				const span = document.createElement('span');
+				const span = doc.createElement('span');
 				if (plugin.settings.highlightText) {
 					span.className = 'lv-live-text';
 				}
@@ -81,7 +82,7 @@ export const liveVariableReadingProcessor =
 			}
 			if (lastIndex < text.length) {
 				fragment.appendChild(
-					document.createTextNode(text.slice(lastIndex))
+					doc.createTextNode(text.slice(lastIndex))
 				);
 			}
 			node.replaceWith(fragment);
