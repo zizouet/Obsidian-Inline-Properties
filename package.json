@@ -15,6 +15,7 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
+		"@eslint/js": "^9.39.4",
 		"@stylistic/eslint-plugin-js": "^2.8.0",
 		"@types/node": "^20.0.0",
 		"@types/react": "^18.3.11",
