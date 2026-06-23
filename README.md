@@ -63,11 +63,8 @@ Override the `.lv-live-text` CSS class in a CSS snippet:
 
 ## Installation
 
-This plugin is not yet in the Obsidian community plugin list. To install manually:
+This plugin is in the [Obsidian community plugin list](https://community.obsidian.md/plugins/inline-properties). You can install it directly from Obsidian.
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the latest release.
-2. Copy them to `<vault>/.obsidian/plugins/live-variables/`.
-3. Reload Obsidian and enable the plugin under **Settings → Community plugins**.
 
 ## Development
 
